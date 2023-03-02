@@ -1,0 +1,49 @@
+{% extends 'summary_module/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" id="main">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">Total Employee</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_employee }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row" id="department" style="display:none">
+        {% for dept in department_wise %}
+            <div class="col-xl-2 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{dept.department_name}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ dept.emp }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+    <script>
+        $("#main").on("click", function(e) {
+            e.preventDefault();
+            $("#department").toggle();
+        });
+    </script>
+{% endblock script %}

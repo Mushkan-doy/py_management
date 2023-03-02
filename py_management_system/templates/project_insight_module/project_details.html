@@ -1,0 +1,246 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Project Report</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-md-6 mb-3 mb-sm-0">
+                        <label for="formFile" class="form-label">Month & Year</label>
+                        <input type="month" class="form-control" id="exampleFirstName" name="month" placeholder="Select Month & Year" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <input type="submit" class="btn btn-primary btn-sm px-4 py-2" value="Submit" name="monthly"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+                <h6 class="m-0 font-weight-bold text-primary">Project Monthly Details</h1>
+        </div>
+        <div class="card-body">
+            <form method="POST" actions="addProjectDetails">
+                {% csrf_token %}
+                <div class="row content">
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Month</label>
+                        <input class="form-control" placeholder="Month" type="text" id="month" name="month" value="{{new_month}}" required/>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Year</label>
+                        <input class="form-control" placeholder="Year" type="year" id="year" name="year" value="{{new_year}}" required/>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Project Name</label>
+                        <select class="form-control" id="project_name" name="project_name">
+                            <option>Select Project Title</option>
+                            {% for p_name in project_data %}
+                                <option value="{{p_name.id}}">{{p_name.project_title}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Project Manager</label>
+                        <select class="form-control" name="project_manager">
+                            <option>Select Project Manager</option>
+                            {% for pm in project_manager %}
+                                <option value="{{pm.employee_name}}">{{pm.employee_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Resource Name</label>
+                        <select class="form-control" id="resource_name" name="resource_name">
+                            <option>Select Resource Name</option>
+                            {% for rn in resource_obj %}
+                                <option value="{{rn.id}}">{{rn.employee_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Billable Hours</label>
+                        <input class="form-control" type="text" id="billable_hrs" name="billable_hrs" value="00:00" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Spent Hours</label>
+                        <input class="form-control" type="text" id="spent_hrs" name="spent_hrs" value="00:00" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Per Hours Cost INR</label>
+                        <input class="form-control" type="text" id="per_hrs_cost_inr" name="per_hrs_cost_inr" value="0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Per Hours Cost Dollar</label>
+                        <input class="form-control" type="text" id="per_hrs_cost_dollar" name="per_hrs_cost_dollar" value="$ 0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Per Hours Rate INR</label>
+                        <input class="form-control" type="text" id="per_hrs_rate_inr" name="per_hrs_rate_inr" value="0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Per Hours Rate Dollar</label>
+                        <input class="form-control" type="text" id="per_hrs_rate_dollar" name="per_hrs_rate_dollar" value="$ 0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Cost INR</label>
+                        <input class="form-control" type="text" id="total_cost_inr" name="total_cost_inr" value="0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Rate INR</label>
+                        <input class="form-control" type="text" id="total_rate_inr" name="total_rate_inr" value="0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Cost Dollar</label>
+                        <input class="form-control" type="text" id="total_cost_dollar" name="total_cost_dollar" value="$ 0.0" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="formFile" class="form-label">Total Rate Dollar</label>
+                        <input class="form-control" type="text" id="total_rate_dollar" name="total_rate_dollar" value="$ 0.0" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="formFile" class="form-label">Profit</label>
+                        <input class="form-control" type="text" id="profit" name="profit" value="0" id="profit" required>
+                    </div>
+
+                    <div class="col-md-12">
+                        {% comment %} <input type="submit" class="btn btn-primary" value="Submit" name="addSalary"/> {% endcomment %}
+                        <input type="submit" class="btn btn-primary" value="Submit" name="saveSalary"/>
+                        <a href="projects" class="btn btn-primary">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    //Project Name input show invoice table data with ajax
+    $('#project_name').on('change',function(){
+        proj_id = $('#project_name').val();
+        month = $('#month').val()
+        year = $('#year').val()
+        //console.log("Project Id = ",proj_id,month,year)
+        
+        let csrf = $("input[name=csrfmiddlewaretoken]").val();
+        mydata = { edit_id:proj_id,  csrfmiddlewaretoken:csrf, month:month, year:year};
+        //console.log('my data:- ', mydata)
+        $.ajax({
+            url : "/ajax/get/val/",
+            method : "POST",
+            data : mydata,
+            dataType :"json",
+            success:function(resdata){
+                console.log("Response Project data = ",resdata)
+                if(resdata){
+                    $.each(resdata, function (key, value){
+                        $('#per_hrs_rate_inr').val(value.per_hrs_rate_inr)
+                        $('#per_hrs_rate_dollar').val(value.per_hrs_rate_dollar)                   
+                    })
+                }
+                if(resdata == ''){
+                    $('#per_hrs_rate_inr').val('0.0')
+                    $('#per_hrs_rate_dollar').val('0.0')  
+                }
+                
+            },
+
+        });
+
+    });
+
+    //Resource Name input show salary table data with ajax
+    $('#resource_name').on('change',function(){
+        res_id = $("#resource_name").val()
+        month = $("#month").val()
+        year = $("#year").val()
+        //console.log("Resource Id = ",res_id,month,year)
+
+        let csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+        mydata = {id:res_id, csrfmiddlewaretoken:csrf, month:month, year:year}
+        //console.log("Resource Data = ",mydata)
+
+        $.ajax({
+            url: "ajax/get/resource",
+            method: 'POST',
+            data: mydata,
+            dataType: "json",
+            success: function(resdata){
+                console.log("Response Data For Resource = ",resdata)
+                if(resdata){
+                    //print("Response Data = ",resdata)
+                    $.each(resdata,function(key,value){
+                        $('#per_hrs_cost_inr').val(value.per_hrs_cost_inr)
+                        $('#per_hrs_cost_dollar').val(value.per_hrs_cost_dollar)
+                    })
+                }
+                if(resdata == ''){
+                    $('#per_hrs_cost_inr').val('0.0')
+                    $('#per_hrs_cost_dollar').val('0.0')  
+                }
+                
+            },
+        });
+    });
+
+    //Total Cost INR
+    $("#per_hrs_cost_inr, #spent_hrs ").on('focusout', function() {
+        var value1 = parseFloat($("#per_hrs_cost_inr").val()) > 0 ? parseFloat($("#per_hrs_cost_inr").val()) : 0;
+        var value2 = parseFloat($("#spent_hrs").val()) > 0 ? parseFloat($("#spent_hrs").val()) : 0;
+        var sumOfValues = value1 * value2;
+        var total_cost_inr = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('total_cost_inr ' + total_cost_inr);
+        var value3 = parseFloat($("#total_cost_inr").val(total_cost_inr))
+    });
+
+    //Total Rate INR
+    $("#per_hrs_rate_inr, #billable_hrs ").on('focusout', function() {
+        var value1 = parseFloat($("#per_hrs_rate_inr").val()) > 0 ? parseFloat($("#per_hrs_rate_inr").val()) : 0;
+        var value2 = parseFloat($("#billable_hrs").val()) > 0 ? parseFloat($("#billable_hrs").val()) : 0;
+        var sumOfValues = value1 * value2;
+        var total_rate_inr = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('total_rate_inr ' + total_rate_inr);
+        var value3 = parseFloat($("#total_rate_inr").val(total_rate_inr))
+    });
+
+    //Total Cost Dollar
+    $("#per_hrs_cost_dollar, #spent_hrs ").on('focusout', function() {
+        var value1 = parseFloat($("#per_hrs_cost_dollar").val()) > 0 ? parseFloat($("#per_hrs_cost_dollar").val()) : 0;
+        var value2 = parseFloat($("#spent_hrs").val()) > 0 ? parseFloat($("#spent_hrs").val()) : 0;
+        var sumOfValues = value1 * value2;
+        var total_cost_dollar = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('total_cost_dollar ' + total_cost_dollar);
+        var value3 = parseFloat($("#total_cost_dollar").val(total_cost_dollar))
+    });
+    
+    //Total Rate Dollar
+    $("#per_hrs_rate_dollar, #billable_hrs ").on('focusout', function() {
+        var value1 = parseFloat($("#per_hrs_rate_dollar").val()) > 0 ? parseFloat($("#per_hrs_rate_dollar").val()) : 0;
+        var value2 = parseFloat($("#billable_hrs").val()) > 0 ? parseFloat($("#billable_hrs").val()) : 0;
+        var sumOfValues = value1 * value2;
+        var total_rate_dollar = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('total_rate_dollar ' + total_rate_dollar);
+        var value3 = parseFloat($("#total_rate_dollar").val(total_rate_dollar))
+    });
+    
+    //Total Profit
+    $("#total_cost_inr, #total_rate_inr ").on('focusout', function() {
+        var value1 = parseFloat($("#total_cost_inr").val()) > 0 ? parseFloat($("#total_cost_inr").val()) : 0;
+        var value2 = parseFloat($("#total_rate_inr").val()) > 0 ? parseFloat($("#total_rate_inr").val()) : 0;
+        var sumOfValues = value2 - value1;
+        var profit = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('profit ' + profit);
+        var value3 = parseFloat($("#profit").val(profit))
+    });
+</script>
+{% endblock script %}

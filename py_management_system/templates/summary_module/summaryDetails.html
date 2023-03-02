@@ -1,0 +1,296 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Summary Report</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-md-6 mb-3 mb-sm-0">
+                        <label for="formFile" class="form-label">Month & Year</label>
+                        <input type="month" class="form-control" id="exampleFirstName" name="month" placeholder="Select Month & Year" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <input type="submit" class="btn btn-primary btn-sm px-4 py-2" value="Submit" name="monthly"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+                <h6 class="m-0 font-weight-bold text-primary">Monthly Details</h1>
+        </div>
+        <div class="card-body">
+            {% if summary_data_obj %}
+                {% for data in summary_data_obj %}
+                    {% if data.flag == True %}
+                        <form method="POST" actions="addSummaryDetails">
+                            {% csrf_token %}
+                            <div class="row content">
+                                
+                                <input class="form-control" type="number" id="id" name="id" value="{{data.id}}" hidden>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Month</label>
+                                    <input class="form-control" placeholder="month" type="text" id="month" name="month" value="{{data.month}}" readonly/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Year</label>
+                                    <input class="form-control" placeholder="year" type="year" id="year" name="year" value="{{data.year}}" readonly/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total HeadCount</label>
+                                    <input class="form-control" type="number" id="total_headcount" name="total_headcount" value="{{data.total_headcount}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Technical Team Count</label>
+                                    <input class="form-control" type="number" id="technical_team" name="technical_team" value="{{data.technical_team}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Active Developer</label>
+                                    <input class="form-control" type="number" id="active_developer" name="active_developer" value="{{data.active_developer}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Working Days</label>
+                                    <input class="form-control" type="number" id="total_working_day" name="total_working_day" value="{{data.total_working_day}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Expected Hours</label>
+                                    <input class="form-control" type="text" id="total_expected_hrs" name="total_expected_hrs" value="{{data.total_expected_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                    <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="{{data.total_freeze_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">New Client Hours</label>
+                                    <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="{{data.new_client_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Existing Client Hours</label>
+                                    <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="{{data.existing_client_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Billable Hours</label>
+                                    <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="{{data.total_billable_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Utilizations Resources</label>
+                                    <input class="form-control" type="number" id="total_utilization" name="total_utilization" value="{{data.total_utilization}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Income</label>
+                                    <input class="form-control" type="number" id="total_income" name="total_income" value="{{data.total_income}}" id="total_income" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Expense</label>
+                                    <input class="form-control" type="number" id="total_expense" name="total_expense" value="{{data.total_expense}}" id="total_expense" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Profit</label>
+                                    <input class="form-control" type="number" id="profit" name="profit" value="{{data.profit}}" id="profit" step="any" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Per Resource Cost</label>
+                                    <input class="form-control" type="number" id="per_resource_cost" name="per_resource_cost" value="{{data.per_resource_cost}}" step="any" readonly>
+                                </div>
+                                <input type="number" name="flag" value="False" hidden/>
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Submit" name="addSummary" disabled/>
+                                    <input type="submit" class="btn btn-primary" value="Save" name="saveSummary" disabled/>
+                                    <a href="summary" class="btn btn-primary">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <form method="POST" actions="addSummaryDetails">
+                            {% csrf_token %}
+                            <div class="row content">
+                                {% comment %} <input class="form-control col-md-6" placeholder="month" type="text" id="month" name="month" value="{{data.month}}" hidden/>
+                                <input class="form-control col-md-6" placeholder="year" type="year" id="year" name="year" value="{{data.year}}" hidden/> {% endcomment %}
+                                <input class="form-control" type="number" id="id" name="id" value="{{data.id}}" hidden>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Month</label>
+                                    <input class="form-control" placeholder="month" type="text" id="month" name="month" value="{{data.month}}" required/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Year</label>
+                                    <input class="form-control" placeholder="year" type="year" id="year" name="year" value="{{data.year}}" required/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total HeadCount</label>
+                                    <input class="form-control" type="number" id="total_headcount" name="total_headcount" value="{{data.total_headcount}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Technical Team Count</label>
+                                    <input class="form-control" type="number" id="technical_team" name="technical_team" value="{{data.technical_team}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Active Developer</label>
+                                    <input class="form-control" type="number" id="active_developer" name="active_developer" value="{{data.active_developer}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Working Days</label>
+                                    <input class="form-control" type="number" id="total_working_day" name="total_working_day" value="{{data.total_working_day}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Expected Hours</label>
+                                    <input class="form-control" type="text" id="total_expected_hrs" name="total_expected_hrs" value="{{data.total_expected_hrs}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                    <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="{{data.total_freeze_hrs}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">New Client Hours</label>
+                                    <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="{{data.new_client_hrs}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Existing Client Hours</label>
+                                    <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="{{data.existing_client_hrs}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Billable Hours</label>
+                                    <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="{{data.total_billable_hrs}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Utilizations Resources</label>
+                                    <input class="form-control" type="number" id="total_utilization" name="total_utilization" value="{{data.total_utilization}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Income</label>
+                                    <input class="form-control" type="number" id="total_income" name="total_income" value="{{data.total_income}}" id="total_income" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Expense</label>
+                                    <input class="form-control" type="number" id="total_expense" name="total_expense" value="{{data.total_expense}}" id="total_expense" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Profit</label>
+                                    <input class="form-control" type="number" id="profit" name="profit" value="{{data.profit}}" id="profit" step="any" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Per Resource Cost</label>
+                                    <input class="form-control" type="number" id="per_resource_cost" name="per_resource_cost" value="{{data.per_resource_cost}}" step="any">
+                                </div>
+                                <input type="number" name="flag" value="False" hidden/>
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Submit" name="addSummary"/>
+                                    <input type="submit" class="btn btn-primary" value="Save" name="saveSummary" disabled/>
+                                    <a href="summary" class="btn btn-primary">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <form method="POST" actions="addSummaryDetails">
+                    {% csrf_token %}
+                    <div class="row content">
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Month</label>
+                            <input class="form-control" placeholder="Month" type="text" id="month" name="month" value="{{new_month}}" required/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Year</label>
+                            <input class="form-control" placeholder="Year" type="year" id="year" name="year" value="{{new_year}}" required/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total HeadCount</label>
+                            <input class="form-control" type="number" id="total_headcount" name="total_headcount" value="{{total_headcount}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Technical Team Count</label>
+                            <input class="form-control" type="number" id="technical_team" name="technical_team" value="{{technical_team}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Active Developer</label>
+                            <input class="form-control" type="number" id="active_developer" name="active_developer" value="{{active_developer}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Working Days</label>
+                            <input class="form-control" type="number" id="total_working_day" name="total_working_day" value="{{total_working_day}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Expected Hours</label>
+                            <input class="form-control" type="text" id="total_expected_hrs" name="total_expected_hrs" value="{{total_expected_hrs}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Freeze Hours</label>
+                            <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="{{total_freeze_hrs}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">New Client Hours</label>
+                            <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="{{new_client_hrs}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Existing Client Hours</label>
+                            <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="{{existing_client_hrs}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Billable Hours</label>
+                            <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="{{total_billable_hrs}}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Utilizations Resources</label>
+                            <input class="form-control" type="number" id="total_utilization" name="total_utilization" value="{{utilization_resources}}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Income</label>
+                            <input class="form-control" type="number" id="total_income" name="total_income" value="0" id="total_income" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Expense</label>
+                            <input class="form-control" type="number" id="total_expense" name="total_expense" value="0" id="total_expense" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Profit</label>
+                            <input class="form-control" type="number" id="profit" name="profit" value="0" id="profit" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Per Resource Cost</label>
+                            <input class="form-control" type="number" id="per_resource_cost" name="per_resource_cost" value="0" step="any">
+                        </div>
+                        <input type="number" name="flag" value="False" hidden/>
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-primary" value="Submit" name="addSummary"/>
+                            <input type="submit" class="btn btn-primary" value="Save" name="saveSummary"/>
+                            <a href="summary" class="btn btn-primary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    $("#total_income, #total_expense").on('focusout', function() {
+        var sp = parseFloat($("#total_income").val()) > 0 ? parseFloat($("#total_income").val()) : 0;
+        var cp = parseFloat($("#total_expense").val()) > 0 ? parseFloat($("#total_expense").val()) : 0
+        var profilt = sp - cp;
+        console.log('profilt ' + profilt);
+        var new_profit = (profilt / sp) * 100
+        var profit_val = Number.parseFloat(new_profit).toFixed(2)
+        console.log("New PROFIT = ",profit_val)
+        var value3 = parseFloat($("#profit").val(profit_val))
+      });
+
+      $("#active_developer, #total_expense").on('focusout', function() {
+        var value1 = parseFloat($("#total_expense").val()) > 0 ? parseFloat($("#total_expense").val()) : 0;
+        var value2 = parseFloat($("#active_developer").val()) > 0 ? parseFloat($("#active_developer").val()) : 0;
+        var sumOfValues = value1 / value2;
+        var per_resource_cost = Number.parseFloat(sumOfValues).toFixed(2);
+        console.log('per_resource_cost ' + per_resource_cost);
+        var value3 = parseFloat($("#per_resource_cost").val(per_resource_cost))
+      });
+</script>
+{% endblock script %}

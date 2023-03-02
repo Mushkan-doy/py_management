@@ -1,0 +1,137 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Monthly Summary Details</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        <input type="month" class="monthPicker form-control" id="exampleFirstName" name="search" placeholder="Search" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="submit" class="btn btn-primary btn-sm px-4 py-2" value="Search" name="monthly"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Summary Data Display Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex align-items-center mb-4">
+                <h6 class="m-0 font-weight-bold text-primary">Summary Details</h1>
+                <a href="addSummary" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="margin-left:72%">
+                    <i class="fas fa-plus fa-sm text-white-50"></i> 
+                    New Summary
+                </a>
+                <a href="addPmSummary" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="margin-left:1%">
+                    <i class="fas fa-plus fa-sm text-white-50"></i> 
+                    New PM Summary
+                </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Total HeadCount</th>
+                            <th>Total Billable Hours</th>
+                            <th>Profit</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Total HeadCount</th>
+                            <th>Total Billable Hours</th>
+                            <th>Profit</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if summary_month_wise %}
+                            {% for sum in summary_month_wise %}
+                                <tr>
+                                    <td>{{sum.month}}</td>
+                                    <td>{{sum.year}}</td>
+                                    <td>{{sum.total_headcount}}</td>
+                                    <td>{{sum.total_billable_hrs}}</td>
+                                    <td>{{sum.profit}}%</td>
+                                    {% if sum.flag == True %}
+                                        <td><span class="badge badge-success">Completed</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-primary">Pending</span></td>
+                                    {% endif %}
+                                    
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for summary in summary_data %}
+                                <tr>
+                                    <td>{{summary.month}}</td>
+                                    <td>{{summary.year}}</td>
+                                    <td>{{summary.total_headcount}}</td>
+                                    <td>{{summary.total_billable_hrs}}</td>
+                                    <td>{{summary.profit}}%</td>
+                                    {% if summary.flag == True %}
+                                        <td><span class="badge badge-success">Completed</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-primary">Progress</span></td>
+                                    {% endif %}
+                                    
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %} 
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+    <script>
+        {% comment %} $(document).ready(function()
+        {   
+            $(".monthPicker").datepicker({
+                dateFormat: 'MM yy',
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+        
+                onClose: function(dateText, inst) {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+                }
+            });
+        
+            $(".monthPicker").focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $("#ui-datepicker-div").position({
+                    my: "center top",
+                    at: "center bottom",
+                    of: $(this)
+                });
+            });
+        }); {% endcomment %}
+    </script>
+{% endblock script %}

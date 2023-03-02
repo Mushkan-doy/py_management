@@ -1,0 +1,95 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Salary Report</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <label for="formFile" class="form-label">Month & Year</label>
+                        <input type="month" class="monthPicker form-control" id="exampleFirstName" name="search" placeholder="Search" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <input type="submit" class="btn btn-primary btn-sm px-4 py-2" value="Calculate" name="monthly"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- Salary Data Display Table -->
+     <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex align-items-center mb-4">
+            <h6 class="m-0 font-weight-bold text-primary">Salary Details</h1>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Employee</th>
+                            <th>Salary</th>
+                            <th>Cost_INR</th>
+                            <th>Cost_$</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Employee</th>
+                            <th>Salary</th>
+                            <th>Cost_INR</th>
+                            <th>Cost_$</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if salary_month_wise %}
+                            {% for sum in sal_data %}
+                                <tr>
+                                    <td>{{sum.month}}</td>
+                                    <td>{{sum.year}}</td>
+                                    <td>{{sum.employee}}</td>
+                                    <td>{{sum.salary}}</td>
+                                    <td>{{sum.per_hrs_cost_inr}}</td>
+                                    <td>${{sum.per_hrs_cost_dollar}}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for salary in salary_data %}
+                                <tr>
+                                    <td>{{salary.month}}</td>
+                                    <td>{{salary.year}}</td>
+                                    <td>{{salary.employee}}</td>
+                                    <td>{{salary.salary}}</td>
+                                    <td>{{salary.per_hrs_cost_inr}}</td>
+                                    <td>${{salary.per_hrs_cost_dollar}}</td>                                    
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %} 
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

@@ -1,0 +1,466 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">PM Summary Report</h6>
+        </div>
+        <div class="card-body">
+            <form method="POST" class="user">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-md-6 mb-3 mb-sm-0">
+                        <label for="formFile" class="form-label">Month & Year</label>
+                        <input type="month" class="form-control" id="exampleFirstName" name="month" placeholder="Select Month & Year" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <button class="btn btn-primary" id="submit" name="monthly">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+            <h6 class="m-0 font-weight-bold text-primary">Monthly Details</h1>
+        </div>
+        <div class="card-body">
+            {% comment %} {% if project_data %}
+                {% for data in project_data %}
+                    {% if data.pm_flag == True %}
+                        <form method="POST" actions="add_pm_summary">
+                            {% csrf_token %}
+                            <div class="row content">
+                                <input class="form-control" type="number" id="id" name="id" value="{{data.id}}" hidden/>
+                                <input type="number" name="pm_flag" value="False" hidden/>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Month</label>
+                                    <input class="form-control" type="text" id="month" name="month" value="{{data.month}}" readonly/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Year</label>                                    
+                                    <input class="form-control" type="year" id="year" name="year" value="{{data.year}}" readonly/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Project Manager Name</label>
+                                    <select class="form-control" name="pm_name" disabled>
+                                        <option>Select Project Manager</option>
+                                        {% for pm in project_manager %}
+                                            <option value="{{pm}}" {% if pm == data.pm_name %} selected {% endif %} >{{pm}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Team Count</label>
+                                    <input class="form-control" type="number" id="no_of_resources" name="no_of_resources" value="{{data.no_of_resources}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Active Developer Count</label>
+                                    <input class="form-control" type="number" id="total_active_developer" name="total_active_developer" value="{{data.total_active_developer}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                    <input class="form-control" type="number" id="total_freeze_hrs" name="total_freeze_hrs" value="{{data.total_freeze_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                                    <input class="form-control" type="number" id="existing_client_hrs" name="existing_client_hrs" value="{{data.existing_client_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                                    <input class="form-control" type="number" id="new_client_hrs" name="new_client_hrs" value="{{data.new_client_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No Of Billable Hours</label>
+                                    <input class="form-control" type="number" id="total_billable_hrs" name="total_billable_hrs" value="{{data.total_billable_hrs}}" readonly>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary" disabled/>
+                                    <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" disabled/>
+                                    <a href="summary" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </form> 
+                    {% else %}
+                        <form method="POST" actions="add_pm_summary">
+                            {% csrf_token %}
+                            <div class="row content">
+                                <input class="form-control" type="number" id="id" name="id" value="{{data.id}}" hidden/>
+                                <input type="number" name="pm_flag" value="False" hidden/>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Month</label>
+                                    <input class="form-control" type="text" id="month" name="month" value="{{data.month}}"/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Year</label>                                    
+                                    <input class="form-control" type="year" id="year" name="year" value="{{data.year}}"/>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Project Manager Name</label>
+                                    <select class="form-control" name="pm_name">
+                                        <option>Select Project Manager</option>
+                                        {% for pm in project_manager %}
+                                            <option value="{{pm}}" {% if pm == data.pm_name %} selected {% endif %} >{{pm}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Team Count</label>
+                                    <input class="form-control" type="number" id="no_of_resources" name="no_of_resources" value="{{data.no_of_resources}}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Active Developer Count</label>
+                                    <input class="form-control" type="number" id="total_active_developer" name="total_active_developer" value="{{data.total_active_developer}}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                    <input class="form-control" type="number" id="total_freeze_hrs" name="total_freeze_hrs" value="{{data.total_freeze_hrs}}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                                    <input class="form-control" type="number" id="existing_client_hrs" name="existing_client_hrs" value="{{data.existing_client_hrs}}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                                    <input class="form-control" type="number" id="new_client_hrs" name="new_client_hrs" value="{{data.new_client_hrs}}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formFile" class="form-label">No Of Billable Hours</label>
+                                    <input class="form-control" type="number" id="total_billable_hrs" name="total_billable_hrs" value="{{data.total_billable_hrs}}">
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary" />
+                                    <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" disabled/>
+                                    <a href="summary" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </form> 
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <form method="POST" actions="add_pm_summary">
+                    {% csrf_token %}
+                    <div class="row content">
+                        <input type="number" name="pm_flag" value="False" hidden/>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Month</label>
+                            <input class="form-control" type="text" id="month" name="month" value="{{new_month}}"/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Year</label>                                    
+                            <input class="form-control" type="year" id="year" name="year" value="{{new_year}}"/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Project Manager Name</label>
+                            <select class="form-control" name="pm_name">
+                                <option>Select Project Manager</option>
+                                {% for pm in project_manager %}
+                                    <option value="{{pm.employee_name}}">{{pm.employee_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Team Count</label>
+                            <input class="form-control" type="number" id="no_of_resources" name="no_of_resources">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Active Developer Count</label>
+                            <input class="form-control" type="number" id="total_active_developer" name="total_active_developer">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Freeze Hours</label>
+                            <input class="form-control" type="number" id="total_freeze_hrs" name="total_freeze_hrs">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                            <input class="form-control" type="number" id="existing_client_hrs" name="existing_client_hrs">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                            <input class="form-control" type="number" id="new_client_hrs" name="new_client_hrs">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No Of Billable Hours</label>
+                            <input class="form-control" type="number" id="total_billable_hrs" name="total_billable_hrs">
+                        </div>
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary" />
+                            <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" />
+                            <a href="summary" class="btn btn-primary">Back</a>
+                        </div>
+                    </div>
+                </form> 
+            {% endif %} {% endcomment %}
+            {% if project_data %}
+                {% if pm_count == pm_summary_count %}
+                    <form method="POST" actions="add_pm_summary">
+                        {% csrf_token %}
+                        {% for data in project_data %}
+                            {% if data.pm_flag == True %}
+                                <div class="row content d-sm-flex align-items-center justify-content-between mb-4">
+                                    <div class="col-md-12 mb-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">PM Details</h6>
+                                        <hr>
+                                    </div>
+                                    <input class="form-control" type="number" id="id" name="id" value="{{data.id}}" hidden/>
+                                    <input type="number" name="pm_flag" value="False" hidden/>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Month</label>
+                                        <input class="form-control" type="text" id="month" name="month" value="{{data.month}}"/>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Year</label>                                    
+                                        <input class="form-control" type="year" id="year" name="year" value="{{data.year}}"/>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Project Manager Name</label>
+                                        <select class="form-control" name="pm_name">
+                                            <option>Select Project Manager</option>
+                                            {% for pm in project_manager %}
+                                                <option value="{{pm}}" {% if pm == data.pm_name %} selected {% endif %} >{{pm}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Total Team Count</label>
+                                        <input class="form-control" type="number" id="no_of_resources" name="no_of_resources" value="{{data.no_of_resources}}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Total Active Developer Count</label>
+                                        <input class="form-control" type="number" id="total_active_developer" name="total_active_developer" value="{{data.total_active_developer}}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                        <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="{{data.total_freeze_hrs}}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                                        <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="{{data.existing_client_hrs}}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                                        <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="{{data.new_client_hrs}}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="formFile" class="form-label">No Of Billable Hours</label>
+                                        <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="{{data.total_billable_hrs}}">
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary" />
+                                <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" {% if pm_count == pm_summary_count %} disabled{% endif %}/>
+                                <a href="summary" class="btn btn-primary">Cancel</a>
+                            </div>
+                        </div>
+                    </form> 
+                {% else %}
+                    <form method="POST" actions="add_pm_summary">
+                        {% csrf_token %}
+                        <div class="row content">
+                            <input type="number" name="pm_flag" value="False" hidden/>
+                            <input type="number" name="submit_flag" value="False" hidden/>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Month</label>
+                                <input class="form-control" type="text" id="month" name="month" value="{{new_month}}"/>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Year</label>                                    
+                                <input class="form-control" type="year" id="year" name="year" value="{{new_year}}"/>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Project Manager Name</label>
+                                <select class="form-control" name="pm_name">
+                                    <option>Select Project Manager</option>
+                                    {% for pm in project_manager %}
+                                        <option value="{{pm.employee_name}}">{{pm.employee_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Total Team Count</label>
+                                <input class="form-control" type="number" id="no_of_resources" name="no_of_resources">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Total Active Developer Count</label>
+                                <input class="form-control" type="number" id="total_active_developer" name="total_active_developer">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">Total Freeze Hours</label>
+                                <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="00:00">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                                <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="00:00">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                                <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="00:00">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="formFile" class="form-label">No Of Billable Hours</label>
+                                <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="00:00">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary" {% if pm_count == pm_summary_count %} disabled{% endif %}/>
+                                <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" />
+                                <a href="summary" class="btn btn-primary">Back</a>
+                            </div>
+                        </div>
+                    </form> 
+                {% endif %}
+            {% else %}
+                <form method="POST" actions="add_pm_summary">
+                    {% csrf_token %}
+                    <div class="row content">
+                        <input type="number" name="pm_flag" value="False" hidden/>
+                        <input type="number" name="submit_flag" value="False" hidden/>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Month</label>
+                            <input class="form-control" type="text" id="month" name="month" value="{{new_month}}"/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Year</label>                                    
+                            <input class="form-control" type="year" id="year" name="year" value="{{new_year}}"/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Project Manager Name</label>
+                            <select class="form-control" name="pm_name">
+                                <option>Select Project Manager</option>
+                                {% for pm in project_manager %}
+                                    <option value="{{pm.employee_name}}">{{pm.employee_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Team Count</label>
+                            <input class="form-control" type="number" id="no_of_resources" name="no_of_resources" value="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Active Developer Count</label>
+                            <input class="form-control" type="number" id="total_active_developer" name="total_active_developer" value="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">Total Freeze Hours</label>
+                            <input class="form-control" type="text" id="total_freeze_hrs" name="total_freeze_hrs" value="00:00">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No of Hrs from Exisiting Client</label>
+                            <input class="form-control" type="text" id="existing_client_hrs" name="existing_client_hrs" value="00:00">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No of Hrs from New Client</label>
+                            <input class="form-control" type="text" id="new_client_hrs" name="new_client_hrs" value="00:00">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="formFile" class="form-label">No Of Billable Hours</label>
+                            <input class="form-control" type="text" id="total_billable_hrs" name="total_billable_hrs" value="00:00">
+                        </div>
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-primary" value="Submit" name="addPmSummary"/>
+                            <input type="submit" class="btn btn-primary" value="Save" name="savePmSummary" />
+                            <a href="summary" class="btn btn-primary">Back</a>
+                        </div>
+                    </div>
+                </form> 
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Start Summary Data Display Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Pm Summary Details</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Project Manager</th>
+                            <th>Total Developers</th>
+                            <th>Active Developers</th>
+                            <th>Freeze Hours</th>
+                            <th>Exisiting Client Hours</th>
+                            <th>New Client Hours</th>
+                            <th>Billable Hours</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Project Manager</th>
+                            <th>Total Developers</th>
+                            <th>Active Developers</th>
+                            <th>Freeze Hours</th>
+                            <th>Exisiting Client Hours</th>
+                            <th>New Client Hours</th>
+                            <th>Billable Hours</th>
+                            <th>Actions</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for data in pm_summary_data %}
+                            <tr>
+                                <td>{{data.month}}</td>
+                                <td>{{data.year}}</td>
+                                <td>{{data.pm_name}}</td>
+                                <td>{{data.no_of_resources}}</td>
+                                <td>{{data.total_active_developer}}</td>
+                                <td>{{data.total_freeze_hrs}}</td>
+                                <td>{{data.total_billable_hrs}}</td>
+                                <td>{{data.existing_client_hrs}}</td>
+                                <td>{{data.new_client_hrs}}</td>
+                                {% if data.submit_flag == True %}
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-primary">Pending</span></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- End Summary Data Display Table -->
+{% endblock content %}
+
+{% block script %}
+<script>
+
+    $("#existing_client_hrs,#new_client_hrs").on('focusout', function() {
+        var value1 = parseFloat($("#existing_client_hrs").val()) > 0 ? parseFloat($("#existing_client_hrs").val()) : 0;
+        var value2 = parseFloat($("#new_client_hrs").val()) > 0 ? parseFloat($("#new_client_hrs").val()) : 0
+        var sumOfValues = value1 + value2;
+        console.log('Your sum is ' + sumOfValues);
+        var value3 = parseFloat($("#total_billable_hrs").val(sumOfValues))
+    });
+
+    $('#dataTable').DataTable();
+</script>
+{% endblock script %}

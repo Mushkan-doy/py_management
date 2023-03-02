@@ -1,0 +1,114 @@
+{% extends 'summary_module/base.html' %}
+
+{% block header %}{% endblock header %}
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Monthly Project Details</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        <input type="month" class="monthPicker form-control" id="exampleFirstName" name="search" placeholder="Search" style="font-size: .8rem;border-radius: 10rem;padding: 1.2rem 1rem;">
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="submit" class="btn btn-primary btn-sm px-4 py-2" value="Search" name="monthly"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Summary Data Display Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex align-items-center mb-4">
+                <h6 class="m-0 font-weight-bold text-primary">Summary Details</h1>
+               
+                <a href="project_details" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="margin-left:81%">
+                    <i class="fas fa-plus fa-sm text-white-50"></i> 
+                    New Project Details
+                </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Project Name</th>
+                            <th>Project Manager</th>
+                            <th>Resource Name</th>
+                            <th>Profit</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Project Name</th>
+                            <th>Project Manager</th>
+                            <th>Resource Name</th>
+                            <th>Profit</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if project_details_month_wise %}
+                            {% for sum in project_details_month_wise %}
+                                <tr>
+                                    <td>{{sum.month}}</td>
+                                    <td>{{sum.year}}</td>
+                                    <td>{{sum.project_name}}</td>
+                                    <td>{{sum.project_manager}}</td>
+                                    <td>{{sum.resource_name}}</td>
+                                    <td>{{sum.profit}}</td>
+                                    {% comment %} {% if sum.flag == True %}
+                                        <td><span class="badge badge-success">Completed</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-primary">Pending</span></td>
+                                    {% endif %} {% endcomment %}
+                                    
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for summary in project_details_data %}
+                                <tr>
+                                    <td>{{summary.month}}</td>
+                                    <td>{{summary.year}}</td>
+                                    <td>{{summary.project_name}}</td>
+                                    <td>{{summary.project_manager}}</td>
+                                    <td>{{summary.resource_name}}</td>
+                                    <td>{{summary.profit}}</td>
+                                    {% comment %} {% if summary.flag == True %}
+                                        <td><span class="badge badge-success">Completed</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-primary">Progress</span></td>
+                                    {% endif %} {% endcomment %}
+                                    
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan='6' class="text-center" style="font-size:20px">Currently no Data Available</td>
+                                </tr>
+                            {% endfor %} 
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+    <script>
+    </script>
+{% endblock script %}

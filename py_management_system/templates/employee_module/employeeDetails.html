@@ -1,0 +1,153 @@
+{% extends 'summary_module/base.html' %}
+
+{% block content %}
+    {% for z in department_wise %}
+        <div class="row">
+            {% if z.department_name == 'Operation' %}
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ z.department_name }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ z.emp }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% for emp in employee_type_wise %}
+                    {% if emp.employee_type == 'PM' or emp.employee_type == 'QA' or emp.employee_type == 'Developer' or emp.employee_type == 'Designer' %}
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ emp.employee_type }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ emp.emp }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="row">
+            {% if z.department_name == 'Sales' %}
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ z.department_name }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ z.emp }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% for emp in employee_type_wise %}
+                    {% if emp.employee_type == 'BDE' or emp.employee_type == 'HR' %}
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ emp.employee_type }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ emp.emp }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    {% endif %}
+                {% endfor %}    
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if z.department_name == 'IT Support' %}
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ z.department_name }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ z.emp }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% for emp in employee_type_wise %}
+                    {% if emp.employee_type == 'IT Support' %}
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ emp.employee_type }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ emp.emp }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}    
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if z.department_name == 'Account' %}
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ z.department_name }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ z.emp }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% for emp in employee_type_wise %}
+                    {% if emp.employee_type == 'MNGT' %}
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="h5 mb-0 font-weight-bold text-primary text-uppercase">{{ emp.employee_type }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ emp.emp }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}    
+            {% endif %}
+        </div>
+    {% endfor %}  
+{% endblock content %}
